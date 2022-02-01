@@ -75,7 +75,7 @@ with corresponding stock data for the given ticker.
 The results are consistent and produce no bad data as far as I am aware. Below is an example of
 the stock price for ticker MSFT on the February 1st, 2022:
 
-![Screenshot](graphics/MSFT_2022_02_01.pdf)
+![Screenshot](graphics/MSFT_2022_02_01.png)
 
 ## Known Issues
 
