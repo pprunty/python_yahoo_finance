@@ -62,5 +62,5 @@ def get_current_price(stock):
         logger.warning(f" {e} - Missing data for ticker {stock.ticker} at {get_time_in_std_format()}."
                        f" Using previous value: {stock.current_price}")
 
-        # Return previously scrapped price
+        # Return previously scrapped stock data
         return stock

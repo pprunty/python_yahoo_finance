@@ -34,8 +34,7 @@ class Data:
         @brief A function which creates a directory, using the absolute path of the
         parent directory, instantiated in the constructor.
 
-        :param directory: The directory to be created.
-        :param self: The Portfolio class
+        :param directory: The directory to be created
             """
         try:
             path = os.path.join(str(self.parent_dir), directory)

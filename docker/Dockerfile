@@ -10,9 +10,6 @@ COPY --chown=$USERNAME:$USERNAME * $USERHOME/
 # Change permissions on bash script
 RUN chmod 775 $USERHOME/startup.sh
 
-# Make time-zone Irish time
-#ENV TZ=/usr/share/zoneinfo/US/Eastern
-
 # Run environment
 WORKDIR /home/trader
 

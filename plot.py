@@ -154,6 +154,8 @@ def plot_data(args):
     :param args: The given command line arguments
             """
 
+    tickers = args.ticker.split()
+
     # Get stock price array
     stock_prices = get_stock_prices(args.start, args.end, args.ticker)
 
@@ -171,18 +173,25 @@ def plot_data(args):
     # gplot.put("ytics nomirror")
 
     gplot.key("bottom right")
-    gplot(stock_prices, " axes x1y1", f" w l t '{args.ticker}'")
-    # gplot(stock_prices, " axes x1y1", f" w l t '{args.ticker}'", ",",
-    #       get_stock_prices(args.start, args.end, "^DJI"), " axes x1y2",
-    #       f" w l t '^DJI'"
-    #       )
+
+    if len(tickers) == 2:
+        gplot(get_stock_prices(args.start, args.end, tickers[0]), " axes x1y1", f" w l t '{tickers[0]}'",
+              ",",
+              get_stock_prices(args.start, args.end, tickers[1]), " axes x1y2",
+              f" w l t '{tickers[1]}'"
+              )
+    else:
+        gplot(get_stock_prices(args.start, args.end, tickers[0]), " axes x1y1", f" w l t '{tickers[0]}'")
 
 
 if __name__ == '__main__':
     """
         """
     parser = argparse.ArgumentParser(description='Program to store intra-day data on Stocks')
-    parser.add_argument("-t", "--ticker", type=str, dest="ticker", help="The stock ticker", required=True)
+    parser.add_argument("-t", "--ticker", type=str, dest="ticker", help="The stock ticker(s). The capability to"
+                                                                        "graph two stocks side by side is possible but"
+                                                                        "you must put tickers in a string separated by"
+                                                                        "a single space.", required=True)
     parser.add_argument("-s", "--start", type=str, dest="start", help="The start date of data. Format: YYYY_MM_DD")
     parser.add_argument("-e", "--end", type=str, dest="end", help="The end date of data. Format: YYYY_MM_DD")
 

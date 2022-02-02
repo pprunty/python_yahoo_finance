@@ -60,7 +60,8 @@ Program to store intra-day data on Stocks
 optional arguments:
   -h, --help            show this help message and exit
   -t TICKER, --ticker TICKER
-                        The stock ticker
+                        The stock ticker(s). The capability tograph two stocks side by side is possible butyou must put 
+                                             tickers in a string separated bya single space.
   -s START, --start START
                         The start date of data. Format: YYYY_MM_DD
   -e END, --end END     The end date of data. Format: YYYY_MM_DD
@@ -75,7 +76,22 @@ with corresponding stock data for the given ticker.
 The results are consistent and produce no bad data as far as I am aware. Below is an example of
 the stock price for ticker MSFT on the February 1st, 2022:
 
+To produce a plot of MSFT on a given day, use the following command:
+
+```shell
+python3 plot.py -t MSFT -s 2022_02_01 -e 2022_02_01
+```
+
 ![Screenshot](graphics/MSFT_2022_02_01.png)
+
+To produce a plot of MSFT and APPL over two days, use the following command:
+
+```shell
+python3 plot.py -t "MSFT APPL" -s 2022_02_01 -e 2022_02_02
+```
+
+![Screenshot](graphics/MSFT_AAPL_2022_02_01_2022_02_02.png)
+
 
 ## Known Issues
 
