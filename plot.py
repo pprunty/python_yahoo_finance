@@ -167,11 +167,6 @@ def plot_data(args):
     gplot.xlabel(xlabel)
     gplot.mxtics().mytics(2)
 
-    # gplot("set ytics nomirror tc")
-    # gplot("set y2tics nomirror tc")
-    #
-    # gplot.put("ytics nomirror")
-
     gplot.key("bottom right")
 
     if len(tickers) == 2:
