@@ -53,7 +53,7 @@ class Data:
             for stock in stocks:
                 filename = str(self.parent_dir + "/" + self.stock_dir + f"/{stock.ticker}_{self.date}.txt")
                 with open(filename, "a+") as f:
-                    f.write(f"{stock.current_price}\n")
+                    f.write(f"{get_time_in_std_format()}\t\t{stock.current_price}\n")
                     f.close()
         except Exception as e:
             logger.critical(e)

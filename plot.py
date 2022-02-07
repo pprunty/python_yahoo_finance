@@ -1,5 +1,7 @@
 import argparse
 import os
+import re
+
 import custom_logger
 
 from time import sleep
@@ -57,7 +59,7 @@ def get_directory_offset(index, base_directory, offset):
     return str(dir_list[five_back])
 
 
-def get_stock_prices(start, end, tickers, directory=STOCK_DIR):
+def get_stock_prices(start, end, ticker, directory=STOCK_DIR):
     """
     @brief A function which iterates through the given directory, reads the data from each file in the specified
     directory and stores the data in an array.
@@ -66,48 +68,43 @@ def get_stock_prices(start, end, tickers, directory=STOCK_DIR):
     :param directory: The base directory where to search for the files
     :return array: The array containing data from start filename -> end filename
             """
+    # Initialize an empty array
+    array = []
 
-    tickers = tickers.split()
-    stock_data = []
-    for ticker in tickers:
-        # Initialize an empty array
-        array = []
+    # Get the current filename, and the end filename
+    current_filename = directory + start + f"/{ticker}_{start}.txt"
+    end_filename = directory + end + f"/{ticker}_{end}.txt"
 
-        # Get the current filename, and the end filename
-        current_filename = directory + start + f"/{ticker}_{start}.txt"
-        end_filename = directory + end + f"/{ticker}_{end}.txt"
+    # Get the current (starting) directory
+    current_directory = str(start)
 
-        # Get the current (starting) directory
-        current_directory = str(start)
+    # While we haven't reached the end filename
+    while current_directory != end:
 
-        # While we haven't reached the end filename
-        while current_directory != end:
+        logging.info(f"Reading data from file {current_filename} into array.")
 
-            logging.info(f"Reading data from file {current_filename} into array.")
+        # Open the file in the current directory
+        with open(current_filename) as file:
+            # Append data to the data array
+            while line := file.readline().rstrip():
+                array.append(float(line))
+            # Close file
+            file.close()
+        # Update current directory to be the next directory in the base directory
+        current_directory = next_directory(current_directory, directory)
+        # Update current filename to be the file in the updated current directory
+        current_filename = directory + current_directory + f"/{ticker}_{current_directory}.txt"
 
-            # Open the file in the current directory
-            with open(current_filename) as file:
-                # Append data to the data array
-                while line := file.readline().rstrip():
-                    array.append(float(line))
-                # Close file
-                file.close()
-            # Update current directory to be the next directory in the base directory
-            current_directory = next_directory(current_directory, directory)
-            # Update current filename to be the file in the updated current directory
-            current_filename = directory + current_directory + f"/{ticker}_{current_directory}.txt"
+    # Read data from the last file
+    if os.path.isfile(end_filename):
+        with open(end_filename) as file:
+            while line := file.readline().rstrip():
+                array.append(float(re.split("\t+", line)[1]))
+            file.close()
+        return array
+    else:
+        return []
 
-        # Read data from the last file
-        if os.path.isfile(end_filename):
-            with open(end_filename) as file:
-                while line := file.readline().rstrip():
-                    array.append(float(line))
-                file.close()
-            stock_data.append(array)
-        else:
-            return []
-
-    return stock_data
 
 
 def get_average_array(stock_prices):
@@ -157,7 +154,7 @@ def plot_data(args):
     tickers = args.ticker.split()
 
     # Get stock price array
-    stock_prices = get_stock_prices(args.start, args.end, args.ticker)
+    # stock_prices = get_stock_prices(args.start, args.end, args.ticker)
 
     # Set title to plot using the ticker
     gplot.title(f'"{args.ticker}"').grid()
@@ -169,11 +166,20 @@ def plot_data(args):
 
     gplot.key("bottom right")
 
+    sp1 = get_stock_prices(args.start, args.end, tickers[0])
+    sp2 = get_stock_prices(args.start, args.end, tickers[1])
+
     if len(tickers) == 2:
         gplot(get_stock_prices(args.start, args.end, tickers[0]), " axes x1y1", f" w l t '{tickers[0]}'",
-              ",",
+              ", ",
               get_stock_prices(args.start, args.end, tickers[1]), " axes x1y2",
-              f" w l t '{tickers[1]}'"
+              f" w l t '{tickers[1]}'",
+              ", ",
+              get_average_array(sp2), " axes x1y2", f" w l t 'Moving average {tickers[1]}'",
+              ", ",
+              get_average_array(sp1), " axes x1y1", f" w l t 'Moving average {tickers[0]}'",
+              # ", ",
+              # get_average_array(get_stock_prices(args.start, args.end, tickers[1])), " axes x1y1", f" w l t 'Moving average {tickers[1]}'",
               )
     else:
         gplot(get_stock_prices(args.start, args.end, tickers[0]), " axes x1y1", f" w l t '{tickers[0]}'")
