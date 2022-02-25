@@ -5,6 +5,8 @@ know there are packages such as yfinance and yahoo-finance, however, I found
 these implementations to be particularly buggy when attempting to record intra-minute 
 stock data in live time. Thus, I created my own implementation.
 
+![Screenshot](graphics/MSFT_AAPL_2022_02_01_2022_02_14.png)
+
 ## Contents
 
 1. [Overview](#overview)

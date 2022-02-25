@@ -31,5 +31,6 @@ stocks = [
         "DOW",
         "^DJI",
         "GOOG",
-        "GOOGL"
+        "GOOGL",
+        "^VXD"
           ]
