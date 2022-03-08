@@ -87,7 +87,13 @@ def get_stock_prices(start, end, ticker, directory=STOCK_DIR):
         with open(current_filename) as file:
             # Append data to the data array
             while line := file.readline().rstrip():
-                array.append(float(line))
+
+                line_contents = re.split("\t+", line)
+
+                if len(line_contents) > 1:
+                    array.append(float(line_contents[1]))
+                else:
+                    array.append(float(line_contents[0]))
             # Close file
             file.close()
         # Update current directory to be the next directory in the base directory
@@ -99,7 +105,13 @@ def get_stock_prices(start, end, ticker, directory=STOCK_DIR):
     if os.path.isfile(end_filename):
         with open(end_filename) as file:
             while line := file.readline().rstrip():
-                array.append(float(re.split("\t+", line)[1]))
+
+                line_contents = re.split("\t+", line)
+
+                if len(line_contents) > 1:
+                    array.append(float(line_contents[1]))
+                else:
+                    array.append(float(line_contents[0]))
             file.close()
         return array
     else:
